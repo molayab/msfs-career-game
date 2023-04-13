@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:testai/main.dart';
 import 'package:testai/models/airport.dart';
@@ -14,7 +13,20 @@ class Fleet extends StatefulWidget {
 class _Fleet extends State<Fleet> {
   List<Airport> airports = [];
 
-  final europeanCountries = ['A320', 'A321', 'A330', 'A350', 'A380', 'B737', 'B747', 'B757', 'B767', 'B777', 'B787', 'E190'];
+  final europeanCountries = [
+    'A320',
+    'A321',
+    'A330',
+    'A350',
+    'A380',
+    'B737',
+    'B747',
+    'B757',
+    'B767',
+    'B777',
+    'B787',
+    'E190'
+  ];
 
   @override
   void initState() {
@@ -29,21 +41,10 @@ class _Fleet extends State<Fleet> {
     setState(() {
       airports = air;
     });
-  }  
- 
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Expanded(child:
-      ListView.builder(
-        physics: const AlwaysScrollableScrollPhysics(),
-      scrollDirection: Axis.vertical,
-        itemCount: airports.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(airports[index].name),
-          );
-        },
-      )
-    );
+    return Text("hello world");
   }
 }

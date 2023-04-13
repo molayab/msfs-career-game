@@ -1,4 +1,3 @@
-
 import 'package:testai/models/airport.dart';
 import 'package:testai/services/airports_service.dart';
 import 'dart:math';
@@ -23,27 +22,34 @@ class MissionService {
     final meters = nm * 1852;
     // Serch for airports in 100km radius
     final currentPosition = await airportService.get(icao);
-    final point = Point(currentPosition.latitude, currentPosition.longitude);
-    
-    final sercheanbleArea = CoordsHelper.createSerchableArea(point, meters);
-    final a = await airportService.allInRectAndRoute(sercheanbleArea, meters, point, icao);
+    final point = Point(currentPosition!.latitude, currentPosition!.longitude);
 
-    a.sort((a, b) => _getDistanceBetweenTwoPoints(point, Point(a.latitude, a.longitude))
-        .compareTo(_getDistanceBetweenTwoPoints(point, Point(b.latitude, b.longitude))));
+    final sercheanbleArea = CoordsHelper.createSerchableArea(point, meters);
+    final a = await airportService.allInRectAndRoute(
+        sercheanbleArea, meters, point, icao);
+
+    a.sort((a, b) =>
+        _getDistanceBetweenTwoPoints(point, Point(a.latitude, a.longitude))
+            .compareTo(_getDistanceBetweenTwoPoints(
+                point, Point(b.latitude, b.longitude))));
 
     final randomNumberOfPassengers = Random().nextInt(100);
     final randomWeight = Random().nextInt(100);
     final randomAirportFee = Random().nextInt(100);
 
-    return a.map((e) => Mission(
-      fromAirportId: currentPosition.id,
-      toAirportId: e.id,
-      passengers: randomNumberOfPassengers,
-      cargo: randomWeight,
-      destination: e.code,
-      fee: randomAirportFee.toDouble(),
-      distance: _getDistanceBetweenTwoPoints(point, Point(e.latitude, e.longitude)) / 1852,
-    )).toList();
+    return a
+        .map((e) => Mission(
+              fromAirportId: currentPosition.id,
+              toAirportId: e.id,
+              passengers: randomNumberOfPassengers,
+              cargo: randomWeight,
+              destination: e.code,
+              fee: randomAirportFee.toDouble(),
+              distance: _getDistanceBetweenTwoPoints(
+                      point, Point(e.latitude, e.longitude)) /
+                  1852,
+            ))
+        .toList();
   }
 
   double _getDistanceBetweenTwoPoints(Point p1, Point p2) {
@@ -63,4 +69,3 @@ class MissionService {
     return radius * c;
   }
 }
-

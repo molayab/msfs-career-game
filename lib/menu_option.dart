@@ -17,8 +17,15 @@ class MenuOption extends StatelessWidget {
     return Column(
       children: <Widget>[
         const SizedBox(height: 10),
-        Image.asset(image, width: 32, height: 32, color: isSelected ? Colors.amber : Colors.white,),
-        Text(text, style: TextStyle(color: isSelected ? Colors.amber : Colors.white)),
+        Image.asset(
+          image,
+          width: 32,
+          height: 32,
+          color: isSelected ? Colors.amber : Colors.white,
+        ),
+        Text(text,
+            style: TextStyle(
+                color: isSelected ? Colors.amber : Colors.white, fontSize: 14)),
         const SizedBox(height: 10),
       ],
     );

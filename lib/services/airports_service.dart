@@ -1,4 +1,3 @@
-
 import 'dart:math';
 
 import 'package:testai/models/airport.dart';
@@ -16,19 +15,24 @@ class AirportsService {
     return maps.map((e) => Airport.fromMap(e)).toList();
   }
 
-  Future<Airport> get(String icao) async {
+  Future<Airport?> get(String icao) async {
     final db = await database.connect();
-    final List<Map<String, dynamic>> maps = await db.query('airports', where: 'icao = ?', whereArgs: [icao]);
+    final List<Map<String, dynamic>> maps =
+        await db.query('airports', where: 'icao = ?', whereArgs: [icao]);
+
+    if (maps.isEmpty) {
+      return null;
+    }
 
     return Airport.fromMap(maps.first);
   }
 
-  Future<List<Airport>> allInRectAndRoute(Rect rect, double meters, Point center, String icao) async {
+  Future<List<Airport>> allInRectAndRoute(
+      Rect rect, double meters, Point center, String icao) async {
     final db = await database.connect();
-    final List<Map<String, dynamic>> maps = await db.query(
-      'airports', 
-      where: 'lat > ? AND lat < ? AND lon > ? AND lon < ?', 
-      whereArgs: [rect.south.x, rect.north.x, rect.west.y, rect.east.y]);
+    final List<Map<String, dynamic>> maps = await db.query('airports',
+        where: 'lat > ? AND lat < ? AND lon > ? AND lon < ?',
+        whereArgs: [rect.south.x, rect.north.x, rect.west.y, rect.east.y]);
     final routes = await getRoutesFrom(icao);
 
     var list = maps.map((e) => Airport.fromMap(e)).toList().map((i) {
@@ -54,7 +58,7 @@ class AirportsService {
 	      INNER JOIN (SELECT R.dst, R.equipment, R.dst_id FROM airports AS A 
 		      INNER JOIN routes AS R ON A.id = R.src_id WHERE R.src_id = ? 
 	      ) AS H ON H.dst_id = AA.id; 
-    """, [current.id]);
+    """, [current!.id]);
 
     return maps.map((e) => Airport.fromMap(e)).toList();
   }
